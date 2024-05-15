@@ -6,9 +6,10 @@ import {
   Paper,
   Stack,
   IconButton,
+  Skeleton,
 } from "@mui/material";
 import { Search } from "@mui/icons-material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { styled } from "@mui/material/styles";
 import BG from "../assets/bg.jpg";
 import useCurrentWeather from "../hooks/useCurrentWeather";
@@ -37,9 +38,18 @@ const handleSubmit = async (e, cityName, dispatch) => {
 
 function Dashboard() {
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(true);
   const [cityName, setCityName] = useState("");
   const currentWeather = useCurrentWeather();
   const weatherCode = currentWeather?.weather?.[0]?.icon;
+
+  useEffect(() => {
+    if (Object.keys(currentWeather).length !== 0) {
+      setLoading(false);
+    } else {
+      setLoading(true);
+    }
+  }, [currentWeather]);
 
   let icon, iconDesc;
   if (weatherCode) {
@@ -161,26 +171,27 @@ function Dashboard() {
                 <Search />
               </IconButton>
             </Paper>
-            <Typography
+            {loading ? (<Skeleton variant="rounded" width="50%" height={30} sx={{  mb: '12px' }} animation="wave" />) : (<Typography
               mb={1}
               color="#fff"
               sx={{ typography: { xs: "h5", md: "h4" } }}
             >
               {currentWeather?.name}, {currentWeather?.sys?.country}
-            </Typography>
-            <Typography
+            </Typography>)}
+            
+            {loading ? (<Skeleton variant="rounded" width="50%" height={30} animation="wave" />) : (<Typography
               variant="h2"
               color="#fff"
               sx={{ fontWeight: "500", typography: { xs: "h3", md: "h2" } }}
             >
               {currentWeather?.main?.temp}&deg;
-            </Typography>
+            </Typography>)}
           </Box>
           <Box>
             <Stack direction="row" spacing={2} flexWrap="wrap" useFlexGap>
               <Item>
                 <PreTitle>Description</PreTitle>
-                <Stack useFlexGap direction="row" alignItems="center">
+                {loading ? (<Skeleton variant="text" width="75%" sx={{ fontSize: '2.5rem' }} animation="wave" />) : (<Stack useFlexGap direction="row" alignItems="center">
                   <Typography
                     sx={{ typography: { xs: "subtitle2", md: "h5" } }}
                   >
@@ -191,49 +202,49 @@ function Dashboard() {
                     alt="Icon"
                     style={{ width: "35px", height: "35px" }}
                   />
-                </Stack>
+                </Stack>)}
               </Item>
               <Item>
                 <PreTitle>Temp. min</PreTitle>
-                <Typography sx={{ typography: { xs: "subtitle2", md: "h5" } }}>
+                { loading ? (<Skeleton variant="text" width="75%" sx={{ fontSize: '2.5rem' }} animation="wave" />) : (<Typography sx={{ typography: { xs: "subtitle2", md: "h5" } }}>
                   {currentWeather?.main?.temp_min}
-                </Typography>
+                </Typography>)}
               </Item>
               <Item>
                 <PreTitle>Temp. max</PreTitle>
-                <Typography sx={{ typography: { xs: "subtitle2", md: "h5" } }}>
+                { loading ? (<Skeleton variant="text" width="75%" sx={{ fontSize: '2.5rem' }} animation="wave" />) : (<Typography sx={{ typography: { xs: "subtitle2", md: "h5" } }}>
                   {currentWeather?.main?.temp_max}
-                </Typography>
+                </Typography>)}
               </Item>
               <Item>
                 <PreTitle>Pressure</PreTitle>
-                <Typography sx={{ typography: { xs: "subtitle2", md: "h5" } }}>
+                { loading ? (<Skeleton variant="text" width="75%" sx={{ fontSize: '2.5rem' }} animation="wave" />) : (<Typography sx={{ typography: { xs: "subtitle2", md: "h5" } }}>
                   {currentWeather?.main?.pressure}
-                </Typography>
+                </Typography>)}
               </Item>
               <Item>
                 <PreTitle>Humidity</PreTitle>
-                <Typography sx={{ typography: { xs: "subtitle2", md: "h5" } }}>
+                { loading ? (<Skeleton variant="text" width="75%" sx={{ fontSize: '2.5rem' }} animation="wave" />) : (<Typography sx={{ typography: { xs: "subtitle2", md: "h5" } }}>
                   {currentWeather?.main?.humidity}
-                </Typography>
+                </Typography>)}
               </Item>
               <Item>
                 <PreTitle>Visibility</PreTitle>
-                <Typography sx={{ typography: { xs: "subtitle2", md: "h5" } }}>
+                { loading ? (<Skeleton variant="text" width="75%" sx={{ fontSize: '2.5rem' }} animation="wave" />) : (<Typography sx={{ typography: { xs: "subtitle2", md: "h5" } }}>
                   {currentWeather?.visibility}
-                </Typography>
+                </Typography>)}
               </Item>
               <Item>
                 <PreTitle>Wind Speed</PreTitle>
-                <Typography sx={{ typography: { xs: "subtitle2", md: "h5" } }}>
+                { loading ? (<Skeleton variant="text" width="75%" sx={{ fontSize: '2.5rem' }} animation="wave" />) : (<Typography sx={{ typography: { xs: "subtitle2", md: "h5" } }}>
                   {currentWeather?.wind?.speed}
-                </Typography>
+                </Typography>)}
               </Item>
               <Item>
                 <PreTitle>Timezone</PreTitle>
-                <Typography sx={{ typography: { xs: "subtitle2", md: "h5" } }}>
+                { loading ? (<Skeleton variant="text" width="75%" sx={{ fontSize: '2.5rem' }} animation="wave" />) : (<Typography sx={{ typography: { xs: "subtitle2", md: "h5" } }}>
                   {currentWeather?.timezone}
-                </Typography>
+                </Typography>)}
               </Item>
             </Stack>
           </Box>
